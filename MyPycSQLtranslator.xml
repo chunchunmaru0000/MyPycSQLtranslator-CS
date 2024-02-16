@@ -41,6 +41,21 @@
             Determines if a character is Cyrillic.
             </summary>
         </member>
+        <member name="M:MyPycSQLtranslator.PycSQLtranslator.Quotic(System.Char)">
+            <summary>
+            Determines if a character is quotic
+            </summary>
+        </member>
+        <member name="M:MyPycSQLtranslator.PycSQLtranslator.Anotheric(System.Char)">
+            <summary>
+            Determines if a character is $ or _ or [0-9]
+            </summary>
+        </member>
+        <member name="M:MyPycSQLtranslator.PycSQLtranslator.Valid(System.Char)">
+            <summary>
+            Determines if a character is valid
+            </summary>
+        </member>
         <member name="M:MyPycSQLtranslator.PycSQLtranslator.Tokenize(System.String)">
             <summary>
             Tokenizes the input query into individual words based on the presence of Cyrillic characters.

@@ -50,7 +50,7 @@ namespace MyPycSQLtranslator
             { "прямо", "asc" },
             { "добавить", "insert" },{ "добавь", "insert" }, { "доб", "insert" }, { "вставить", "insert" }, { "вставь", "insert" }, { "встав", "insert" },
             { "к", "into" },
-            { "значения", "values" }, { "знач", "values" }, { "величины", "values" }, { "велич", "values" },
+            { "значения", "values" }, { "значение", "values" }, { "знач", "values" }, { "величины", "values" }, { "величина", "values" }, { "величину", "values" }, { "велич", "values" },
             { "является", "is" }, { "это", "is" },
             { "ноль", "null" }, { "нуль", "null" }, { "нул", "null" }, { "зеро", "null" },
             { "обновить", "update" }, { "обнови", "update" }, { "обнов", "update" }, { "апд", "update" },
@@ -265,6 +265,21 @@ namespace MyPycSQLtranslator
         public static bool Cyrillic(char c) { return  c > 1039 && c < 1104; }
 
         /// <summary>
+        /// Determines if a character is quotic
+        /// </summary>
+        public static bool Quotic(char c) { return c == '"' || c == '`' || c == "'"[0]; }
+
+        /// <summary>
+        /// Determines if a character is $ or _ or [0-9]
+        /// </summary>
+        public static bool Anotheric(char c) { return c == '$' || c == '_' || char.IsDigit(c); }
+
+        /// <summary>
+        /// Determines if a character is valid
+        /// </summary>
+        public static bool Valid(char c) { return Anotheric(c) || Cyrillic(c); }
+
+        /// <summary>
         /// Tokenizes the input query into individual words based on the presence of Cyrillic characters.
         /// </summary>
         private static List<Token> Tokenize(string query)
@@ -275,28 +290,48 @@ namespace MyPycSQLtranslator
 
             bool wordProceedPyc = Cyrillic(query[0]);
             bool wordProceedOther = !Cyrillic(query[0]);
+            bool quoted = Quotic(query[0]);
+            bool quotedProceed = quoted;
 
             for (int i = 1; i < query.Length - 1; i++)
             {
-                if (Cyrillic(query[i]) && wordProceedOther)
+                if (Cyrillic(query[i]) && !Quotic(query[i]) && wordProceedOther && !quotedProceed)
                 {
                     tokens.Add(new Token() { Word = word, Type = "OTHER" });
                     word = "" + query[i];
                     wordProceedOther = false;
                     wordProceedPyc = true;
                 }
-                else if (!Cyrillic(query[i]) && wordProceedPyc)
+                else if (!Cyrillic(query[i]) && !Quotic(query[i]) && wordProceedPyc && !quotedProceed)
                 {
                     tokens.Add(new Token() { Word = word, Type = "PYC" });
                     word = "" + query[i];  
                     wordProceedPyc = false;
                     wordProceedOther = true;
                 }
+                else if (Quotic(query[i]))
+                {
+                    if (quoted)
+                    {
+                        word += query[i];
+                        tokens.Add(new Token() { Word = word, Type = "QUOTED" });
+                        i++;
+                        word = "" + query[i];
+                        quotedProceed = false;
+                    }
+                    else
+                    {
+                        tokens.Add(new Token() { Word = word, Type = wordProceedPyc ? "PYC" : "OTHER" });
+                        word = "" + query[i];
+                        quotedProceed = true;
+                    }
+                    quoted = !quoted;
+                }
                 else
                     word += query[i];
             }
             if (!string.IsNullOrEmpty(word))
-                tokens.Add(new Token() { Word = word, Type = wordProceedPyc ? "PYC" : "OTHER" });
+                tokens.Add(new Token() { Word = word, Type = wordProceedPyc ? "PYC" : wordProceedOther ? "OTHER" : "QUOTED"});
             return tokens;
         }
 
