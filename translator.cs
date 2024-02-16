@@ -295,14 +295,14 @@ namespace MyPycSQLtranslator
 
             for (int i = 1; i < query.Length - 1; i++)
             {
-                if (Cyrillic(query[i]) && !Quotic(query[i]) && wordProceedOther && !quotedProceed)
+                if (Valid(query[i]) && !Quotic(query[i]) && wordProceedOther && !quotedProceed)
                 {
                     tokens.Add(new Token() { Word = word, Type = "OTHER" });
                     word = "" + query[i];
                     wordProceedOther = false;
                     wordProceedPyc = true;
                 }
-                else if (!Cyrillic(query[i]) && !Quotic(query[i]) && wordProceedPyc && !quotedProceed)
+                else if (!Valid(query[i]) && !Quotic(query[i]) && wordProceedPyc && !quotedProceed)
                 {
                     tokens.Add(new Token() { Word = word, Type = "PYC" });
                     word = "" + query[i];  
