@@ -10,14 +10,30 @@ using System.Threading.Tasks;
 
 namespace MyPycSQLtranslator
 {
+    /// <summary>
+    /// Represents a C# class for translating queries from a custom Cyrillic-based SQL-like interpreted-like language to English.
+    /// </summary>
     public static class PycSQLtranslator
     {
+        /// <summary>
+        /// Represents a token with its word and type.
+        /// </summary>
         public struct Token
         {
+            /// <summary>
+            /// The word contained in the token.
+            /// </summary>
             public string Word { set; get; }
+
+            /// <summary>
+            /// The type of the token.
+            /// </summary>
             public string Type {  set; get; }
         }
 
+        /// <summary>
+        /// Dictionary for mapping Cyrillic keywords to their English equivalents.
+        /// </summary>
         public static Dictionary<string, string> PycSQldictionary = new Dictionary<string, string>() {
             { "выбрать", "select" }, { "выбери", "select" },
             { "где", "where" },
@@ -229,6 +245,11 @@ namespace MyPycSQLtranslator
             { "версия", "version" },
         };
 
+        /// <summary>
+        /// Translates the input query from the custom Cyrillic-based language to English.
+        /// </summary>
+        /// <param name="query">The query to be translated.</param>
+        /// <returns>The translated query in English.</returns>
         public static string Translate(string query)
         {
             query = query.ToLower();
@@ -236,8 +257,14 @@ namespace MyPycSQLtranslator
             return string.Join(" ", Dictionarize(ref tokens));
         }
 
+        /// <summary>
+        /// Determines if a character is Cyrillic.
+        /// </summary>
         public static bool Cyrillic(char c) { return  c > 1039 && c < 1104; }
 
+        /// <summary>
+        /// Tokenizes the input query into individual words based on the presence of Cyrillic characters.
+        /// </summary>
         private static List<Token> Tokenize(string query)
         {
             query += " ";
@@ -271,6 +298,9 @@ namespace MyPycSQLtranslator
             return tokens;
         }
 
+        /// <summary>
+        /// Applies translation logic based on the token types and performs the query translation.
+        /// </summary>
         private static List<string> Dictionarize(ref List<Token> tokens)
         {
             var words = new List<string>();

@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MyPycSQLtranslator</name>
+    </assembly>
+    <members>
+        <member name="T:MyPycSQLtranslator.PycSQLtranslator">
+            <summary>
+            Represents a C# class for translating queries from a custom Cyrillic-based SQL-like interpreted-like language to English.
+            </summary>
+        </member>
+        <member name="T:MyPycSQLtranslator.PycSQLtranslator.Token">
+            <summary>
+            Represents a token with its word and type.
+            </summary>
+        </member>
+        <member name="P:MyPycSQLtranslator.PycSQLtranslator.Token.Word">
+            <summary>
+            The word contained in the token.
+            </summary>
+        </member>
+        <member name="P:MyPycSQLtranslator.PycSQLtranslator.Token.Type">
+            <summary>
+            The type of the token.
+            </summary>
+        </member>
+        <member name="F:MyPycSQLtranslator.PycSQLtranslator.PycSQldictionary">
+            <summary>
+            Dictionary for mapping Cyrillic keywords to their English equivalents.
+            </summary>
+        </member>
+        <member name="M:MyPycSQLtranslator.PycSQLtranslator.Translate(System.String)">
+            <summary>
+            Translates the input query from the custom Cyrillic-based language to English.
+            </summary>
+            <param name="query">The query to be translated.</param>
+            <returns>The translated query in English.</returns>
+        </member>
+        <member name="M:MyPycSQLtranslator.PycSQLtranslator.Cyrillic(System.Char)">
+            <summary>
+            Determines if a character is Cyrillic.
+            </summary>
+        </member>
+        <member name="M:MyPycSQLtranslator.PycSQLtranslator.Tokenize(System.String)">
+            <summary>
+            Tokenizes the input query into individual words based on the presence of Cyrillic characters.
+            </summary>
+        </member>
+        <member name="M:MyPycSQLtranslator.PycSQLtranslator.Dictionarize(System.Collections.Generic.List{MyPycSQLtranslator.PycSQLtranslator.Token}@)">
+            <summary>
+            Applies translation logic based on the token types and performs the query translation.
+            </summary>
+        </member>
+    </members>
+</doc>
